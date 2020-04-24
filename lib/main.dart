@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './models/meals.dart';
+import './dummy_data.dart';
 import 'package:recipies/screens/tabs_screen.dart';
 import './screens/category_meal_screen.dart';
 import './screens/tabs_screen.dart';
@@ -15,7 +17,34 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    
+    Map<String,bool> _filters={
+      'gluton': false,
+      'lactose':false,
+      'vegan':false,
+      'vegetarian':false,
+    };
+    List<Meal> _availableMeals=DUMMY_MEALS;
+    void _setFilters(Map<String,bool> newFilters){
+      setState(() {
+        _filters=newFilters;
+        _availableMeals=DUMMY_MEALS.where((meal){
+            if(_filters['gluton'] && !meal.isGlutenFree){
+                return false;
+            } 
+            if(_filters['lactose'] && !meal.isLactoseFree) {
+              return false;
+            }
+            if(_filters['vegan'] && !meal.isVegan) {
+            return false;
+
+            }
+            if(_filters['vegetarian'] && !meal.isVegetarian) {
+              return false;
+            }
+            return true;
+        }).toList();
+      });
+    }
       
     return MaterialApp(
       title: 'Recipies',
@@ -40,12 +69,12 @@ class _MyAppState extends State<MyApp> {
     
       home: TabsScreen(),
       routes: {
-        CategoryMealScreen.routeName: (ctx)=>CategoryMealScreen(),
+        CategoryMealScreen.routeName: (ctx)=>CategoryMealScreen(_availableMeals),
         MealDetails.routeName:(ctx)=>MealDetails(),
-        FilterClass.routeName:(ctx)=>FilterClass(),
+        FilterClass.routeName:(ctx)=>FilterClass(_setFilters,_filters),
       },
       onUnknownRoute: (settings){
-          return MaterialPageRoute(builder: (ctx)=>CategoryMealScreen());
+          return MaterialPageRoute(builder: (ctx)=>CategoryMealScreen(_availableMeals));
       },
     );
   }

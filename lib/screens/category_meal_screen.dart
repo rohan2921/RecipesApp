@@ -17,29 +17,21 @@ class _CategoryMealScreenState extends State<CategoryMealScreen> {
 
   String title;
   List<Meal> ob;
-  var _alreadyLoaded=false;
+  
+  
+  
+    
+
   
   @override
-  void didChangeDependencies() {
-    if(!_alreadyLoaded) {
+  Widget build(BuildContext context) {
     final routArgs =ModalRoute.of(context).settings.arguments as Map<String, String>;
      title = routArgs['title'];
      final String id = routArgs['id'];
      ob = widget._availableMeals.where((meal) {
            return meal.categories.contains(id);
       }).toList();
-    _alreadyLoaded=true;
-    }
-    super.didChangeDependencies();
-  }
-
-  void _removeItem(String mealId){
-    setState(() {
-      ob.removeWhere((test)=> test.id==mealId);
-    });
-  }
-  @override
-  Widget build(BuildContext context) {
+    
     
     return Scaffold(
         appBar: AppBar(
@@ -54,7 +46,7 @@ class _CategoryMealScreenState extends State<CategoryMealScreen> {
                 duration: ob[ind].duration,
                 affd: ob[ind].affordability,
                 comp: ob[ind].complexity,
-                removeItem: _removeItem,
+                
                 );                
           },
           itemCount: ob.length,

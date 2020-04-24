@@ -9,7 +9,7 @@ class MealItem extends StatelessWidget {
   final int duration;
   final Affordability affd;
   final Complexity comp;
-  final Function removeItem;
+
   final str = String.fromCharCode(8377);
   MealItem({
     @required this.id,
@@ -18,7 +18,7 @@ class MealItem extends StatelessWidget {
     @required this.duration,
     @required this.affd,
     @required this.comp,
-    @required this.removeItem,
+   
   });
   String get getComplexity{
       if(Complexity.Simple==comp){
@@ -40,9 +40,7 @@ class MealItem extends StatelessWidget {
 
   }
   void _getDetails(BuildContext context){
-    Navigator.of(context).pushNamed(MealDetails.routeName,arguments: id).then((result){
-      if(result!=null) removeItem(result);
-    });
+    Navigator.of(context).pushNamed(MealDetails.routeName,arguments: id);
   }
   @override
   Widget build(BuildContext context) {
